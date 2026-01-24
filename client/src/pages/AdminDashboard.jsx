@@ -1,9 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { calculateEventStatus, getStatusLabel } from '../utils/eventStatus';
 import './AdminDashboard.css';
 
+
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+const toLocalISOString = (date) => {
+  if (!date) return '';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '';
+  const offset = d.getTimezoneOffset() * 60000;
+  return new Date(d.getTime() - offset).toISOString().slice(0, 16);
+};
+
 
 function AdminDashboard() {
   const [events, setEvents] = useState([]);
@@ -17,6 +28,7 @@ function AdminDashboard() {
     description: '',
     type: 'workshop',
     date: '',
+    endDate: '',
     duration: '',
     location: '',
     isOnline: false,
@@ -30,8 +42,7 @@ function AdminDashboard() {
     whatYouWillLearn: '',
     price: 0,
     upiId: '',
-    payeeName: '',
-    status: 'upcoming'
+    payeeName: ''
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [imagePreview, setImagePreview] = useState('');
@@ -110,9 +121,14 @@ function AdminDashboard() {
             formDataToSend.append(key, formData[key].split(',').map(tag => tag.trim()).filter(tag => tag));
           } else if (key === 'requirements' || key === 'whatYouWillLearn') {
             formDataToSend.append(key, formData[key].split('\n').map(item => item.trim()).filter(item => item));
+          } else if (key === 'date' || key === 'endDate') {
+            if (formData[key]) {
+              formDataToSend.append(key, new Date(formData[key]).toISOString());
+            }
           } else {
             formDataToSend.append(key, formData[key]);
           }
+
         }
       });
 
@@ -156,7 +172,9 @@ function AdminDashboard() {
       title: event.title,
       description: event.description,
       type: event.type,
-      date: new Date(event.date).toISOString().slice(0, 16),
+      date: toLocalISOString(event.date),
+      endDate: event.endDate ? toLocalISOString(event.endDate) : '',
+
       duration: event.duration,
       location: event.location,
       isOnline: event.isOnline,
@@ -170,8 +188,7 @@ function AdminDashboard() {
       whatYouWillLearn: event.whatYouWillLearn.join('\n'),
       price: event.price,
       upiId: event.upiId || '',
-      payeeName: event.payeeName || '',
-      status: event.status
+      payeeName: event.payeeName || ''
     });
 
     // Set image preview if existing image
@@ -225,6 +242,7 @@ function AdminDashboard() {
       description: '',
       type: 'workshop',
       date: '',
+      endDate: '',
       duration: '',
       location: '',
       isOnline: false,
@@ -238,8 +256,7 @@ function AdminDashboard() {
       whatYouWillLearn: '',
       price: 0,
       upiId: '',
-      payeeName: '',
-      status: 'upcoming'
+      payeeName: ''
     });
     setSelectedImage(null);
     setImagePreview('');
@@ -379,9 +396,12 @@ function AdminDashboard() {
                 </div>
                 <div className="event-details">
                   <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
+                  <p><strong>End Date:</strong> {event.endDate ? new Date(event.endDate).toLocaleDateString() : 'Not Set'}</p>
                   <p><strong>Instructor:</strong> {event.instructor}</p>
                   <p><strong>Participants:</strong> {event.participants?.length || 0} registered</p>
-                  <p><strong>Status:</strong> {event.status}</p>
+                  <p><strong>Status:</strong> {getStatusLabel(calculateEventStatus(event.date, event.endDate))}</p>
+
+
                   {event.type === 'workshop' && (
                     <p><strong>UPI:</strong> {event.upiId || 'Not set'}</p>
                   )}
@@ -431,7 +451,7 @@ function AdminDashboard() {
                   />
                 </div>
                 <div className="form-group">
-                  <label>Date & Time</label>
+                  <label>Start Date & Time</label>
                   <input
                     type="datetime-local"
                     value={formData.date}
@@ -439,6 +459,16 @@ function AdminDashboard() {
                     required
                   />
                 </div>
+                <div className="form-group">
+                  <label>End Date & Time</label>
+                  <input
+                    type="datetime-local"
+                    value={formData.endDate}
+                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                    required
+                  />
+                </div>
+
                 <div className="form-group">
                   <label>Duration</label>
                   <input
@@ -548,15 +578,7 @@ function AdminDashboard() {
                     step="0.01"
                   />
                 </div>
-                <div className="form-group">
-                  <label>Status</label>
-                  <select
-                    value={formData.status}
-                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  >
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                </div>
+
                 {formData.type === 'workshop' && (
                   <>
                     <div className="form-group">

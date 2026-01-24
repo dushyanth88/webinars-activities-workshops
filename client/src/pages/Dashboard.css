@@ -1,0 +1,120 @@
+.dashboard-page {
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.dashboard-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 60vh;
+    gap: 1rem;
+}
+
+.loader {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #eee;
+    border-bottom-color: #3b82f6;
+    border-radius: 50%;
+    animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.dashboard-welcome {
+    margin: 2rem 0;
+}
+
+.dashboard-welcome h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-welcome p {
+    color: #666;
+    font-size: 1.1rem;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.dashboard-card-mini {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: transform 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.dashboard-card-mini:hover {
+    transform: translateY(-5px);
+}
+
+.dashboard-card-mini h3 {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    color: #1a1a1a;
+}
+
+.dashboard-card-mini p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.dashboard-card-mini a {
+    display: inline-block;
+    color: #3b82f6;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.95rem;
+}
+
+.dashboard-card-mini a:hover {
+    text-decoration: underline;
+}
+
+/* Dark mode support */
+:root[class~="dark"] .dashboard-card-mini {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+:root[class~="dark"] .dashboard-card-mini h3 {
+    color: #fff;
+}
+
+:root[class~="dark"] .dashboard-card-mini p {
+    color: #aaa;
+}
+
+:root[class~="dark"] .dashboard-welcome p {
+    color: #aaa;
+}
+
+@media (max-width: 768px) {
+    .dashboard-page {
+        padding: 1rem;
+    }
+
+    .dashboard-welcome h2 {
+        font-size: 1.5rem;
+    }
+}

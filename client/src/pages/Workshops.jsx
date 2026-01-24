@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import WorkshopRegistrationModal from '../components/WorkshopRegistrationModal';
+import { calculateEventStatus, getStatusLabel } from '../utils/eventStatus';
 import './Workshops.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
@@ -12,10 +14,14 @@ function Workshops() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [previewImage, setPreviewImage] = useState(null);
-  const { isSignedIn, user } = useUser();
+  const { isSignedIn, isLoaded: isUserLoaded, user } = useUser();
   const { getToken } = useAuth();
   const [selectedWorkshop, setSelectedWorkshop] = useState(null);
   const [myRegistrations, setMyRegistrations] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [isAutoRegistering, setIsAutoRegistering] = useState(searchParams.has('register'));
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     fetchWorkshops();
@@ -23,6 +29,26 @@ function Workshops() {
       fetchMyRegistrations();
     }
   }, [isSignedIn]);
+
+  useEffect(() => {
+    const registerId = searchParams.get('register');
+    if (registerId && workshops.length > 0 && isUserLoaded) {
+      if (!isSignedIn) {
+        toast.error('Please sign in to register');
+        // Clear search params to prevent loop
+        searchParams.delete('register');
+        setSearchParams(searchParams);
+        return;
+      }
+
+      const workshopToRegister = workshops.find(w => w._id === registerId);
+      if (workshopToRegister) {
+        setSelectedWorkshop(workshopToRegister);
+      }
+      setIsAutoRegistering(false);
+    }
+  }, [searchParams, workshops, isSignedIn, isUserLoaded]);
+
 
   const fetchWorkshops = async () => {
     try {
@@ -34,6 +60,7 @@ function Workshops() {
       setLoading(false);
     }
   };
+
 
   const fetchMyRegistrations = async () => {
     try {
@@ -67,16 +94,15 @@ function Workshops() {
     setPreviewImage(null);
   };
 
-  if (loading) {
+  if (loading || isAutoRegistering) {
     return (
-      <div>
-        <div className="events-loading">
-          <div className="loading-spinner"></div>
-          <p>Loading workshops...</p>
-        </div>
+      <div className="events-loading">
+        <div className="loading-spinner"></div>
+        <p>{isAutoRegistering ? 'Preparing registration form...' : 'Loading workshops...'}</p>
       </div>
     );
   }
+
 
   return (
     <div>
@@ -115,16 +141,26 @@ function Workshops() {
                 <div className="event-content">
                   <div className="event-header">
                     <h3>{workshop.title}</h3>
-                    <span className="event-price">
-                      {workshop.price === 0 ? 'Free' : `$${workshop.price}`}
-                    </span>
+                    <div className="event-badges">
+                      <span className={`status-badge-inline ${calculateEventStatus(workshop.date, workshop.endDate)}`}>
+                        {getStatusLabel(calculateEventStatus(workshop.date, workshop.endDate))}
+                      </span>
+
+                      <span className="event-price">
+                        {workshop.price === 0 ? 'Free' : `$${workshop.price}`}
+                      </span>
+                    </div>
                   </div>
+
 
                   <p className="event-description">{workshop.description}</p>
 
                   <div className="event-details">
                     <div className="event-detail">
-                      <strong>Date:</strong> {new Date(workshop.date).toLocaleDateString()}
+                      <strong>Start Date:</strong> {new Date(workshop.date).toLocaleDateString()}
+                    </div>
+                    <div className="event-detail">
+                      <strong>End Date:</strong> {workshop.endDate ? new Date(workshop.endDate).toLocaleDateString() : 'N/A'}
                     </div>
                     <div className="event-detail">
                       <strong>Time:</strong> {new Date(workshop.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -223,13 +259,20 @@ function Workshops() {
       {selectedWorkshop && (
         <WorkshopRegistrationModal
           workshop={selectedWorkshop}
-          onClose={() => setSelectedWorkshop(null)}
+          onClose={() => {
+            setSelectedWorkshop(null);
+            if (searchParams.has('register')) {
+              searchParams.delete('register');
+              setSearchParams(searchParams);
+            }
+          }}
           onSuccess={() => {
             fetchWorkshops();
             if (isSignedIn) fetchMyRegistrations();
           }}
         />
       )}
+
     </div>
   );
 }

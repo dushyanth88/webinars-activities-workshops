@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { calculateEventStatus, getStatusLabel } from '../utils/eventStatus';
 import './AdminEventDetail.css';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -114,11 +116,17 @@ function AdminEventDetail() {
                         <div className="info-content">
                             <h3>Event Information</h3>
                             <p><strong>Description:</strong> {event.description}</p>
-                            <p><strong>Date:</strong> {new Date(event.date).toLocaleString()}</p>
+                            <p><strong>Start Date:</strong> {new Date(event.date).toLocaleString()}</p>
+                            <p><strong>End Date:</strong> {event.endDate ? new Date(event.endDate).toLocaleString() : 'Not Set'}</p>
                             <p><strong>Instructor:</strong> {event.instructor}</p>
+
                             <p><strong>Location:</strong> {event.location || 'Online'}</p>
                             <p><strong>Price:</strong> ₹{event.price}</p>
-                            <p><strong>Status:</strong> <span className={`status-${event.status}`}>{event.status}</span></p>
+                            <p><strong>Status:</strong> <span className={`status-badge-inline ${calculateEventStatus(event.date, event.endDate)}`}>
+                                {getStatusLabel(calculateEventStatus(event.date, event.endDate))}
+                            </span></p>
+
+
 
                             <div className="detail-actions">
                                 <button className="edit-btn-main" onClick={() => navigate(`/admin/dashboard`, { state: { editEvent: event } })}>Edit Event</button>

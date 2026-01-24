@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { SignIn as ClerkSignIn, useAuth, useUser } from '@clerk/clerk-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { calculateEventStatus, getStatusLabel } from '../utils/eventStatus';
 import './Webinars.css';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -113,16 +115,26 @@ function Webinars() {
                 <div className="event-content">
                   <div className="event-header">
                     <h3>{webinar.title}</h3>
-                    <span className="event-price">
-                      {webinar.price === 0 ? 'Free' : `$${webinar.price}`}
-                    </span>
+                    <div className="event-badges">
+                      <span className={`status-badge-inline ${calculateEventStatus(webinar.date, webinar.endDate)}`}>
+                        {getStatusLabel(calculateEventStatus(webinar.date, webinar.endDate))}
+                      </span>
+
+                      <span className="event-price">
+                        {webinar.price === 0 ? 'Free' : `$${webinar.price}`}
+                      </span>
+                    </div>
                   </div>
+
 
                   <p className="event-description">{webinar.description}</p>
 
                   <div className="event-details">
                     <div className="event-detail">
-                      <strong>Date:</strong> {new Date(webinar.date).toLocaleDateString()}
+                      <strong>Start Date:</strong> {new Date(webinar.date).toLocaleDateString()}
+                    </div>
+                    <div className="event-detail">
+                      <strong>End Date:</strong> {webinar.endDate ? new Date(webinar.endDate).toLocaleDateString() : 'N/A'}
                     </div>
                     <div className="event-detail">
                       <strong>Time:</strong> {new Date(webinar.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

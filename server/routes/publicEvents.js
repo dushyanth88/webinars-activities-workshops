@@ -7,11 +7,12 @@ const router = express.Router();
 router.get('/', async (req, res) => {
   try {
     const { type, status, search } = req.query;
-    const filter = { status: 'upcoming' }; // Only show upcoming events by default
-    
+    const filter = {};
+
+
     if (type) filter.type = type;
     if (status) filter.status = status;
-    
+
     if (search) {
       filter.$or = [
         { title: { $regex: search, $options: 'i' } },
@@ -61,14 +62,13 @@ router.get('/type/:type', async (req, res) => {
   try {
     const { type } = req.params;
     const validTypes = ['internship', 'workshop', 'webinar'];
-    
+
     if (!validTypes.includes(type)) {
       return res.status(400).json({ error: 'Invalid event type' });
     }
 
-    const events = await Event.find({ 
-      type, 
-      status: 'upcoming' 
+    const events = await Event.find({
+      type
     })
       .select('-registeredUsers')
       .populate('createdBy', 'firstName lastName')
