@@ -268,6 +268,7 @@ router.delete('/:eventId/unregister', async (req, res) => {
 // Get event statistics
 router.get('/stats/dashboard', verifyAdminToken, async (req, res) => {
   try {
+    const now = new Date();
     const stats = await Event.aggregate([
       {
         $group: {
@@ -276,12 +277,13 @@ router.get('/stats/dashboard', verifyAdminToken, async (req, res) => {
           totalParticipants: { $sum: '$currentParticipants' },
           upcoming: {
             $sum: {
-              $cond: [{ $eq: ['$status', 'upcoming'] }, 1, 0]
+              $cond: [{ $gt: ['$date', now] }, 1, 0]
             }
           }
         }
       }
     ]);
+
 
     const totalEvents = await Event.countDocuments();
     const totalParticipants = await Event.aggregate([

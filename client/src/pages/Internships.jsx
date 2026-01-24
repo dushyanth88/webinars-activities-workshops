@@ -2,7 +2,9 @@ import { useState, useEffect } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { calculateEventStatus, getStatusLabel } from '../utils/eventStatus';
 import './Internships.css';
+
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
@@ -113,16 +115,26 @@ function Internships() {
                 <div className="event-content">
                   <div className="event-header">
                     <h3>{internship.title}</h3>
-                    <span className="event-price">
-                      {internship.price === 0 ? 'Free' : `$${internship.price}`}
-                    </span>
+                    <div className="event-badges">
+                      <span className={`status-badge-inline ${calculateEventStatus(internship.date, internship.endDate)}`}>
+                        {getStatusLabel(calculateEventStatus(internship.date, internship.endDate))}
+                      </span>
+
+                      <span className="event-price">
+                        {internship.price === 0 ? 'Free' : `$${internship.price}`}
+                      </span>
+                    </div>
                   </div>
+
 
                   <p className="event-description">{internship.description}</p>
 
                   <div className="event-details">
                     <div className="event-detail">
                       <strong>Start Date:</strong> {new Date(internship.date).toLocaleDateString()}
+                    </div>
+                    <div className="event-detail">
+                      <strong>End Date:</strong> {internship.endDate ? new Date(internship.endDate).toLocaleDateString() : 'N/A'}
                     </div>
                     <div className="event-detail">
                       <strong>Duration:</strong> {internship.duration}

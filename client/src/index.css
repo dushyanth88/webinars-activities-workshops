@@ -42,6 +42,107 @@ body {
   transition: background-color var(--transition-speed), color var(--transition-speed);
 }
 
+/* Global Input and Form Styling - Forced Black Text */
+input,
+textarea,
+select,
+label,
+.form-group label,
+.form-control,
+[type='text'],
+[type='email'],
+[type='password'],
+[type='number'],
+[type='tel'],
+[type='url'],
+[type='search'],
+[type='date'],
+[type='datetime-local'],
+[type='month'],
+[type='week'],
+[type='time'] {
+  color: #000000 !important;
+}
+
+/* Ensure inputs are clearly visible with black text by providing a light background */
+input,
+textarea,
+select {
+  background-color: #ffffff !important;
+}
+
+/* Placeholder Styling */
+::placeholder {
+  color: #000000 !important;
+  opacity: 0.6 !important;
+}
+
+/* Specific vendor prefixes for placeholders to ensure consistency */
+::-webkit-input-placeholder {
+  color: #000000 !important;
+  opacity: 0.6 !important;
+}
+
+::-moz-placeholder {
+  color: #000000 !important;
+  opacity: 0.6 !important;
+}
+
+:-ms-input-placeholder {
+  color: #000000 !important;
+  opacity: 0.6 !important;
+}
+
+:-moz-placeholder {
+  color: #000000 !important;
+  opacity: 0.6 !important;
+}
+
+/* Chrome/Safari Autofill Styling */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000000 !important;
+  -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+/* Ensure labels are visible in dark mode if they are set to black */
+[data-theme='dark'] label,
+[data-theme='dark'] .form-group label {
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.5);
+  /* Subtle glow to keep black labels visible on dark BG */
+}
+
+/* Global Event Badge Styling */
+.event-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.status-badge-inline {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: white;
+}
+
+.status-badge-inline.upcoming {
+  background-color: #3b82f6;
+}
+
+.status-badge-inline.ongoing {
+  background-color: #10b981;
+}
+
+.status-badge-inline.completed {
+  background-color: #6b7280;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

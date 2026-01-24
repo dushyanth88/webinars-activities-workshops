@@ -14,6 +14,8 @@ import AdminEventDetail from './pages/AdminEventDetail';
 import Layout from './components/Layout';
 import Placeholder from './pages/Placeholder';
 import ReportIssue from './pages/ReportIssue';
+import Dashboard from './pages/Dashboard';
+
 
 function ProtectedRoute({ children }) {
   const { isLoaded, isSignedIn } = useAuth();
@@ -53,13 +55,18 @@ function App() {
           }
         />
         <Route
-          path="/"
+          path="/dashboard"
           element={
             <ProtectedRoute>
-              <Layout><Home /></Layout>
+              <Layout><Dashboard /></Layout>
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/"
+          element={<Navigate to="/dashboard" replace />}
+        />
+
         <Route
           path="/webinars"
           element={

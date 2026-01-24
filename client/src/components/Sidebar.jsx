@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import './Sidebar.css';
 
 const menuItems = [
-    { path: '/', name: 'Dashboard', icon: LayoutDashboard },
+    { path: '/dashboard', name: 'Dashboard', icon: LayoutDashboard },
     { path: '/profile', name: 'Profile', icon: UserCircle },
     { path: '/workshops', name: 'Workshops', icon: BookOpen },
     { path: '/webinars', name: 'Webinars', icon: MonitorPlay },
