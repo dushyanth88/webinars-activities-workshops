@@ -143,11 +143,11 @@ const DashboardCarousel = ({ items }) => {
                 </motion.div>
             </AnimatePresence>
 
-            <button className="carousel-nav-btn prev" onClick={prevSlide}>
-                <ChevronLeft size={24} />
+            <button className="carousel-nav-btn prev" onClick={prevSlide} aria-label="Previous slide">
+                <span className="nav-arrow">&#10094;</span>
             </button>
-            <button className="carousel-nav-btn next" onClick={nextSlide}>
-                <ChevronRight size={24} />
+            <button className="carousel-nav-btn next" onClick={nextSlide} aria-label="Next slide">
+                <span className="nav-arrow">&#10095;</span>
             </button>
 
             <div className="carousel-pagination">

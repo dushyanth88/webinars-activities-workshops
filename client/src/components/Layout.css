@@ -30,14 +30,53 @@
     backdrop-filter: blur(4px);
 }
 
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+/* Extra Small Mobile (320px - 374px) */
+@media (max-width: 374px) {
+    .content-area {
+        padding: 0.75rem;
+    }
+
+    .main-container {
+        margin-left: 0;
+    }
+}
+
+/* Small Mobile (375px - 767px) */
+@media (min-width: 375px) and (max-width: 767px) {
+    .content-area {
+        padding: 1rem;
+    }
+
+    .main-container {
+        margin-left: 0;
+    }
+}
+
+/* Tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .content-area {
+        padding: 1.5rem;
+    }
+}
+
+/* Mobile and Tablet - Show overlay when sidebar is expanded */
 @media (max-width: 1024px) {
     .sidebar-expanded .sidebar-overlay {
         display: block;
     }
+
+    .main-container {
+        width: 100%;
+    }
 }
 
-@media (max-width: 768px) {
+/* Desktop */
+@media (min-width: 1024px) {
     .content-area {
-        padding: 1rem;
+        padding: 2rem;
     }
 }

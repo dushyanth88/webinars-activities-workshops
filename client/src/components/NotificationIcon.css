@@ -58,6 +58,8 @@
     justify-content: center;
     color: var(--text-color, #333);
     transition: background-color 0.2s;
+    min-width: 44px;
+    min-height: 44px;
 }
 
 .notification-icon-btn:hover {
@@ -124,6 +126,7 @@
     padding: 4px 8px;
     border-radius: 4px;
     transition: background-color 0.2s;
+    min-height: 44px;
 }
 
 .mark-all-read-btn:hover {
@@ -165,6 +168,7 @@
     cursor: pointer;
     transition: background-color 0.2s;
     position: relative;
+    min-height: 60px;
 }
 
 .notification-item:hover {
@@ -216,24 +220,13 @@
 
 .notification-unread-dot {
     position: absolute;
-    top: 20px;
-    right: 16px;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
     width: 8px;
     height: 8px;
     background-color: #6366f1;
     border-radius: 50%;
-}
-
-@media (max-width: 768px) {
-    .notification-panel {
-        width: 320px;
-        max-height: 400px;
-    }
-
-
-    .notification-list {
-        max-height: 340px;
-    }
 }
 
 .notification-delete-btn {
@@ -243,7 +236,6 @@
     border: none;
     color: #999;
     cursor: pointer;
-    /* Fixed size for perfect circle */
     width: 28px;
     height: 28px;
     padding: 0;
@@ -253,7 +245,6 @@
     justify-content: center;
     margin-left: 4px;
     flex-shrink: 0;
-    /* Prevent shrinking if text is long */
 }
 
 .notification-item:hover .notification-delete-btn {
@@ -265,13 +256,126 @@
     color: #ef4444;
 }
 
-/* Ensure unread dot doesn't overlap with delete button */
-.notification-unread-dot {
-    position: absolute;
-    top: 50%;
-    right: 12px;
-    transform: translateY(-50%);
+/* ============================================
+   RESPONSIVE STYLES
+   ============================================ */
+
+/* Extra Small Mobile (320px - 374px) */
+@media (max-width: 374px) {
+    .notification-icon-btn {
+        padding: 6px;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    .notification-panel {
+        position: fixed;
+        top: 60px;
+        left: 0.5rem;
+        right: 0.5rem;
+        width: auto;
+        max-height: calc(100vh - 70px);
+        border-radius: 8px;
+    }
+
+    .notification-panel-header {
+        padding: 12px;
+    }
+
+    .notification-panel-header h3 {
+        font-size: 16px;
+    }
+
+    .mark-all-read-btn {
+        font-size: 12px;
+        padding: 4px 6px;
+    }
+
+    .notification-list {
+        max-height: calc(100vh - 130px);
+    }
+
+    .notification-item {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .notification-icon-type {
+        font-size: 20px;
+    }
+
+    .notification-content h4 {
+        font-size: 13px;
+    }
+
+    .notification-content p {
+        font-size: 12px;
+    }
+
+    .notification-time {
+        font-size: 11px;
+    }
+
+    .notification-delete-btn {
+        width: 24px;
+        height: 24px;
+        opacity: 1;
+    }
 }
 
-/* Adjust unread dot position when delete button is present (it's always present now but hidden) */
-/* Actually, simpler approach: make delete button take the space or float right */
+/* Small Mobile (375px - 767px) */
+@media (min-width: 375px) and (max-width: 767px) {
+    .notification-panel {
+        position: fixed;
+        top: 64px;
+        left: 1rem;
+        right: 1rem;
+        width: auto;
+        max-height: calc(100vh - 80px);
+        border-radius: 10px;
+    }
+
+    .notification-panel-header {
+        padding: 14px;
+    }
+
+    .notification-panel-header h3 {
+        font-size: 17px;
+    }
+
+    .notification-list {
+        max-height: calc(100vh - 140px);
+    }
+
+    .notification-item {
+        padding: 14px;
+    }
+
+    .notification-delete-btn {
+        opacity: 1;
+    }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .notification-panel {
+        width: 340px;
+        max-height: 450px;
+    }
+
+    .notification-list {
+        max-height: 390px;
+    }
+}
+
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+    .notification-panel {
+        width: 380px;
+        max-height: 500px;
+    }
+
+    .notification-list {
+        max-height: 440px;
+    }
+}

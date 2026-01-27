@@ -239,6 +239,72 @@
     }
 }
 
+/* Extra Small Mobile (320px - 374px) */
+@media (max-width: 374px) {
+    .mobile-sidebar-toggle {
+        display: flex;
+        top: 0.75rem;
+        left: 0.75rem;
+        width: 40px;
+        height: 40px;
+    }
+
+    .sidebar {
+        width: 240px;
+    }
+
+    .sidebar-logo {
+        padding: 1rem;
+        height: 60px;
+    }
+
+    .sidebar-logo img {
+        height: 24px;
+    }
+
+    .sidebar-logo span {
+        font-size: 1rem;
+    }
+
+    .sidebar-nav {
+        padding: 1rem 0.5rem;
+        gap: 1rem;
+    }
+
+    .nav-item {
+        padding: 0.875rem 0.625rem;
+        min-height: 44px;
+        font-size: 0.9rem;
+    }
+
+    .nav-icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    .section-title {
+        font-size: 0.7rem;
+        padding-left: 0.625rem;
+    }
+
+    .sidebar-profile {
+        padding: 0.875rem;
+    }
+
+    .user-avatar {
+        width: 36px;
+        height: 36px;
+    }
+
+    .user-name {
+        font-size: 0.8rem;
+    }
+
+    .user-email {
+        font-size: 0.7rem;
+    }
+}
+
 @media (max-width: 767px) {
 
     /* Show mobile toggle button */

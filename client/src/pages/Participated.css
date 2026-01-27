@@ -34,11 +34,15 @@
 }
 
 @media (min-width: 768px) {
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
     .filter-wrapper {
         margin-top: 0;
-        position: absolute;
-        right: 0;
-        top: 0;
+        /* create a new stacking context if needed, but flex handles position */
     }
 }
 
@@ -121,6 +125,8 @@
     transition: all 0.3s ease;
     background: transparent;
     color: var(--text-secondary);
+    flex: 0 0 auto;
+    min-width: max-content;
 }
 
 .tab-btn:hover {
